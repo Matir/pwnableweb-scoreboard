@@ -110,17 +110,79 @@ sbDirectives.directive('loadingOverlay', [
 
 /* Draw a scoreboard using the D3 JS library.
  * The data supplied should be an object like:
- * {label: [{x: x point, y: y point}, ...], ...}
+ * {label: [{time: Date, value: y point}, ...], ...}
  */
-sbDirectives.directive('d3LineChart', [
+sbDirectives.directive('d3LineTimeChart', [
     function () {
       return {
         restrict: 'AE',
         replace: false,
         scope: {
-          dataSrc: "="
+          graphSrc: '=graphSrc'
         },
         link: function(scope, element, attrs) {
+          // This still needs a lot of work, including a legend, colors,
+          // styling, etc.
+          if (!d3 || d3 == undefined)
+            return;
+          scope.$watch('graphSrc', function() {
+            var data = scope.graphSrc;
+            if (!data || data == undefined)
+              return;
+
+            var width = element.width();
+            var height = element.height();
+            var sideMargin = width/10;
+            var topMargin = height/10;
+
+            var minDate = null;
+            var maxDate = null;
+            var maxValue = null;
+
+            angular.forEach(data, function(points) {
+              points.sort(function(a,b) {
+                if (a.time < b.time)
+                  return -1;
+                if (a.time > b.time)
+                  return 1;
+                return 0;
+              });
+              if (minDate == null || points[0].time < minDate)
+                minDate = points[0].time;
+              if (maxDate == null || points[points.length-1].time > maxDate)
+                maxDate = points[points.length-1].time;
+              angular.forEach(points, function(point) {
+                if (maxValue == null || point.value > maxValue)
+                  maxValue = point.value;
+              });
+            });
+
+            element.empty();
+
+            var xScale = d3.time.scale().domain([minDate, maxDate]).range([0, width - (sideMargin * 2)]);
+            var yScale = d3.scale.linear().domain([0, maxValue]).range([0, height - (topMargin * 2)]);
+
+            // TODO: adjust ticks based on range
+            var xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(d3.time.hours, 3)
+              .tickFormat(d3.time.format('%H:%M')).tickSize(2).tickPadding(8);
+            var yAxis = d3.svg.axis().scale(yScale).orient('left').tickPadding(8);
+
+            var svg = d3.select(element[0]).append('svg').attr('class', 'chart').attr('width', width)
+              .attr('height', height).append('g').attr('transform',
+                  'translate(' + sideMargin + ', ' + topMargin + ')');
+
+            svg.append('g').attr('class','x_axis').call(xAxis);
+            svg.append('g').attr('class','y_axis').call(yAxis);
+
+            var line = d3.svg.line()
+              .x(function(d) { return xScale(d.time); })
+              .y(function(d) { return yScale(d.value); });
+            
+            // Draw the lines
+            angular.forEach(data, function(points, label) {
+              svg.append('path').attr('d', line(points)).attr('class', 'graph-line');
+            });
+          }, true); // end of scope.$watch
         }
       };
     }]);
