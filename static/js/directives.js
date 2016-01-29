@@ -160,18 +160,20 @@ sbDirectives.directive('d3LineTimeChart', [
             element.empty();
 
             var xScale = d3.time.scale().domain([minDate, maxDate]).range([0, width - (sideMargin * 2)]);
-            var yScale = d3.scale.linear().domain([0, maxValue]).range([0, height - (topMargin * 2)]);
+            var yScale = d3.scale.linear().domain([0, maxValue]).range([height - (topMargin * 2), 0]);
 
-            // TODO: adjust ticks based on range
-            var xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(d3.time.hours, 3)
+            // TODO: adjust ticks based on range and size
+            var xAxis = d3.svg.axis().scale(xScale).orient('bottom').ticks(d3.time.minutes, 3)
               .tickFormat(d3.time.format('%H:%M')).tickSize(2).tickPadding(8);
-            var yAxis = d3.svg.axis().scale(yScale).orient('left').tickPadding(8);
+            var yAxis = d3.svg.axis().scale(yScale).orient('left').tickPadding(8).ticks(5);
 
             var svg = d3.select(element[0]).append('svg').attr('class', 'chart').attr('width', width)
               .attr('height', height).append('g').attr('transform',
                   'translate(' + sideMargin + ', ' + topMargin + ')');
 
-            svg.append('g').attr('class','x_axis').call(xAxis);
+            svg.append('g').attr('class','x_axis')
+              .attr('transform', 'translate(0, ' + (height - (topMargin * 2)) + ')')
+              .call(xAxis);
             svg.append('g').attr('class','y_axis').call(yAxis);
 
             var line = d3.svg.line()

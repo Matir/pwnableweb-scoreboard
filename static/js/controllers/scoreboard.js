@@ -36,7 +36,6 @@ scoreboardCtrls.controller('ScoreboardCtrl', [
         angular.forEach(data, function(team) {
           var history = [];
           angular.forEach(team.history, function(point) {
-            console.log(point);
             history.push({value: point.score, time: new Date(point.time)});
           });
           results[team.name] = history;
