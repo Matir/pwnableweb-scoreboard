@@ -504,7 +504,7 @@ class APIScoreboard(restful.Resource):
     """Retrieve the scoreboard."""
 
     history_fields = {
-        'when': ISO8601DateTime(),
+        'time': ISO8601DateTime(),
         'score': fields.Integer,
     }
     line_fields = {
