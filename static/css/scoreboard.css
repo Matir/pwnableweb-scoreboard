@@ -130,3 +130,42 @@ input.form-control[readonly] {
   fill: none;
   stroke-width: 2px;
 }
+
+/* Colors from colorbrewer2.org */
+.graph-line-1 {
+  stroke: #a6cee3;
+}
+.graph-line-2 {
+  stroke: #1f78b4;
+}
+.graph-line-3 {
+  stroke: #b2df8a;
+}
+.graph-line-4 {
+  stroke: #33a02c;
+}
+.graph-line-5 {
+  stroke: #fb9a99;
+}
+.graph-line-6 {
+  stroke: #e31a1c;
+}
+.graph-line-7 {
+  stroke: #fdbf6f;
+}
+.graph-line-8 {
+  stroke: #ff7f00;
+}
+.graph-line-9 {
+  stroke: #cab2d6;
+}
+.graph-line-10 {
+  stroke: #6a3d9a;
+}
+.graph-line-11 {
+  stroke: #ffff99;
+}
+.graph-line-12 {
+  stroke: #b15928;
+}
+

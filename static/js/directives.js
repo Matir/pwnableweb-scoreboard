@@ -181,8 +181,12 @@ sbDirectives.directive('d3LineTimeChart', [
               .y(function(d) { return yScale(d.value); });
             
             // Draw the lines
+            var color = 0, colorMax = 12;
             angular.forEach(data, function(points, label) {
-              svg.append('path').attr('d', line(points)).attr('class', 'graph-line');
+              svg.append('path').attr('d', line(points))
+                .attr('class', 'graph-line graph-line-' + (color+1));
+              color++;
+              color = color % colorMax;
             });
           }, true); // end of scope.$watch
         }
