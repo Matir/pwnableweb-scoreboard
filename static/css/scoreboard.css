@@ -126,3 +126,7 @@ input.form-control[readonly] {
   width: 100%;
   height: 200px;
 }
+.scoreboard-graph .graph-line {
+  fill: none;
+  stroke-width: 2px;
+}
