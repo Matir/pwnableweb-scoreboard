@@ -107,3 +107,20 @@ sbDirectives.directive('loadingOverlay', [
             }
         };
     }]);
+
+/* Draw a scoreboard using the D3 JS library.
+ * The data supplied should be an object like:
+ * {label: [{x: x point, y: y point}, ...], ...}
+ */
+sbDirectives.directive('d3LineChart', [
+    function () {
+      return {
+        restrict: 'AE',
+        replace: false,
+        scope: {
+          dataSrc: "="
+        },
+        link: function(scope, element, attrs) {
+        }
+      };
+    }]);
