@@ -39,7 +39,7 @@ scoreboardCtrls.controller('ScoreboardCtrl', [
       var getHistory = function(scoreboard) {
         var histories = {};
         angular.forEach(topTeams(scoreboard), function(entry) {
-          histories[entry.name] = entry.history;
+          histories[$('<div/>').text(entry.name).html()] = entry.history;
         });
         return histories;
       };
