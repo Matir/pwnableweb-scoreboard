@@ -15,6 +15,7 @@
  */
 
 var sbDirectives = angular.module('sbDirectives', [
+        'challengeServices',
         'globalServices',
         'ngSanitize'
         ]);
@@ -303,4 +304,74 @@ sbDirectives.directive('donutChart', [
           });
         }
       };
+    }]);
+
+
+/*
+ * Do a single challenge.
+ */
+sbDirectives.directive('challengeBox', [
+    '$resource',
+    'answerService',
+    'errorService',
+    'loadingService',
+    function($resource, answerService, errorService, loadingService) {
+      return {
+        restrict: 'AE',
+        templateUrl: '/partials/components/challenge.html',
+        scope: {
+          chall: '=challenge'
+        },
+        link: function(scope, iElement, iAttrs) {
+          var chall = scope.chall;
+          var hintModal = angular.element(iElement[0].querySelector('.hint-modal'));
+
+          // Setup submit handler
+          scope.submitChallenge = function() {
+            loadingService.start();
+            errorService.clearErrors();
+            answerService.create({cid: chall.cid, answer: chall.answer},
+                function(resp) {
+                  chall.answered = true;
+                  errorService.error(
+                      'Congratulations, ' + resp.points + ' points awarded!',
+                      'success');
+                  loadingService.stop();
+                },
+                function(resp){
+                  errorService.error(resp);
+                  loadingService.stop();
+                });
+          };
+
+          // Setup hint handler
+          scope.unlockHintDialog = function(hint) {
+            errorService.clearErrors();
+            scope.hint = hint;
+            hintModal.modal('show');
+          };
+
+          // Actually unlock
+					scope.unlockHint = function(hint) {
+						$resource('/api/unlock_hint').save({hid: hint.hid},
+								function(data) {
+									hint.hint = data.hint;
+									errorService.error(
+											'Unlocked hint for ' + hint.cost + ' points.',
+											'success');
+									hintModal.modal('hide');
+								},
+								function(data) {
+									errorService.error(data);
+									hintModal.modal('hide');
+								});
+					};
+
+					scope.invalidForm = function(idx) {
+						var form = angular.element(iElement[0].querySelector('.submitForm'));
+						return form.hasClass('ng-invalid');
+					};
+ 
+        }
+      }
     }]);
