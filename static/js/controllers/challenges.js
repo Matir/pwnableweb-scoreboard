@@ -107,14 +107,16 @@ challengeCtrls.controller('ChallengeGridCtrl', [
     'sessionService',
     function($scope, $location, categoryService, loadingService, sessionService) {
       $scope.categories = {};
+      $scope.currChall = null;
       var refresh = function() {
           categoryService.getList(function(data) {
               $scope.categories = data.categories;
           });
       };
 
-      $scope.goChallenge = function(cat, chall) {
-        $location.url('/challenges/' + cat.slug + '#' + chall.cid);
+      $scope.goChallenge = function(chall) {
+        $scope.currChall = chall;
+        $('#challenge-modal').modal('show');
       };
 
       $scope.flipSide = function(chall) {
