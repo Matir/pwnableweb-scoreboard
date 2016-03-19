@@ -325,6 +325,9 @@ sbDirectives.directive('challengeBox', [
         link: function(scope, iElement, iAttrs) {
           var chall = scope.chall;
           var hintModal = angular.element(iElement[0].querySelector('.hint-modal'));
+          var isModal = iElement.parents('.modal').length > 0;
+
+          scope.isModal = isModal;
 
           // Setup submit handler
           scope.submitChallenge = function() {
@@ -348,7 +351,14 @@ sbDirectives.directive('challengeBox', [
           scope.unlockHintDialog = function(hint) {
             errorService.clearErrors();
             scope.hint = hint;
-            hintModal.modal('show');
+            if (!isModal) {
+              hintModal.modal('show');
+            }
+          };
+
+          scope.cancelUnlockHint = function() {
+            hintModal.modal('hide');
+            scope.hint = null;
           };
 
           // Actually unlock
@@ -360,10 +370,12 @@ sbDirectives.directive('challengeBox', [
 											'Unlocked hint for ' + hint.cost + ' points.',
 											'success');
 									hintModal.modal('hide');
+									scope.hint = null;
 								},
 								function(data) {
 									errorService.error(data);
 									hintModal.modal('hide');
+									scope.hint = null;
 								});
 					};
 

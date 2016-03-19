@@ -1,7 +1,10 @@
 <div class='panel panel-primary challenge'>
   <div class='panel-heading' id='{{chall.cid}}'>
     <h3 class='panel-title'>{{chall.name}}</h3>
-    <span class='right points'>{{chall.points}}</span>
+    <span class='right'>
+      <span class='points'>{{chall.points}}</span>
+      <span class='btn btn-sm' data-dismiss='modal' ng-show='isModal'>&times;</span>
+    </span>
   </div>
   <div class='panel-body' ng-hide='chall.teaser'>
     <p ng-bind-html='chall.description|markdown' class='markdown'></p>
@@ -25,11 +28,17 @@
             ng-repeat='hint in chall.hints'
             ng-click='unlockHintDialog(hint)'>Hint {{$index + 1}}</a></li>
         </ul>
+        <div ng-show='hint && isModal' class='unlock-hint well'>
+          <p>Unlocking this hint will reduce the point value by {{hint.cost}}.</p>
+          <button type='button' class='btn btn-default'
+            ng-click='cancelUnlockHint()'>Cancel</button>
+          <button type='button' class='btn btn-primary'
+            ng-click='unlockHint(hint)'>Unlock Hint</button>
+        </div>
       </div> <!-- end hints -->
       <!-- if not solved -->
       <div ng-hide='chall.answered'>
-        <form ng-submit='submitChallenge()' name='submitForm[{{chall.cid}}]'
-          class='submitForm'>
+        <form ng-submit='submitChallenge()' class='submitForm'>
           <input type='hidden' name='cid' value='{{chall.cid}}'>
           <div class='form-group'>
             <label for='answer-{{chall.cid}}'>Answer</label>
@@ -46,7 +55,7 @@
   <div class='panel-body' ng-show='chall.teaser'>
     Prerequisites not met.
   </div>
-</div> <!-- repeat panel -->
+</div> <!-- panel container -->
 
 <!-- Confirm modal div -->
 <div class='hint-modal modal fade'>
