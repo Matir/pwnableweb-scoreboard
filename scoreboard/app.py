@@ -61,6 +61,7 @@ if not on_appengine():
 else:
     app.challenge_log = app.logger
     app.logger.handlers[0].setFormatter(log_formatter)
+    logging.getLogger().handlers[0].setFormatter(log_formatter)
 
 
 # Install a default error handler
