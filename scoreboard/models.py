@@ -458,6 +458,12 @@ class Attachment(db.Model):
     content_type = db.Column(db.String(100))
     storage_path = db.Column(db.String(256))
 
+    def __str__(self):
+        return repr(self)
+
+    def __repr__(self):
+        return '<Attachment %s>' % self.aid
+
     def delete(self, from_disk=True):
         if from_disk:
             try:
