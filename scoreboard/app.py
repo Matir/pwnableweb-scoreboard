@@ -38,7 +38,7 @@ def on_appengine():
             runtime.startswith('Google App Engine/'))
 
 
-log_formatter = logging.Formatter(
+log_formatter = logger.Formatter(
         '%(asctime)s %(levelname)8s [%(filename)s:%(lineno)d] %(client)s %(message)s')
 # log to files unless on AppEngine
 if not on_appengine():
