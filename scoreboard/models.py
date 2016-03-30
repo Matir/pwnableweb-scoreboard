@@ -482,6 +482,9 @@ class Hint(db.Model):
     hint = db.Column(db.Text, nullable=False)
     cost = db.Column(db.Integer)
 
+    def __repr__(self):
+        return '<Hint: %d -> %d>' % (hint.hid, hint.challenge_cid)
+
     def unlock(self, team):
         unlocked = UnlockedHint()
         unlocked.hint = self
