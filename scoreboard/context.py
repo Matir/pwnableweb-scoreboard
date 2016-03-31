@@ -21,6 +21,7 @@ from sqlalchemy import event
 from scoreboard.app import app
 from scoreboard import models
 from scoreboard import utils
+from scoreboard import lightweight
 
 
 DEFAULT_CSP_POLICY = {
@@ -76,16 +77,30 @@ def get_csp_policy():
 @app.before_request
 def load_globals():
     """Prepopulate flask.g.* with user and team."""
-    uid = flask.session.get('user')
-    if uid:
-        # TODO: perform some kind of caching here
-        user = models.User.query.get(uid)
-        if user:
-            flask.g.user = user
-            flask.g.team = user.team
-            return
     flask.g.user = None
     flask.g.team = None
+    uid = flask.session.get('uid')
+    user = flask.session.get('user')
+    team = flask.session.get('team')
+    if user:
+        flask.g.user = lightweight.User.FromJSON(user)
+        if team:
+            flask.g.team = lightweight.Team.FromJSON(team)
+    elif uid:
+        user = models.User.query.get(uid)
+        if user:
+            flask.g.user = lightweight.User(user)
+            flask.g.team = lightweight.Team(team) if team else None
+
+
+@app.after_request
+def save_session():
+    """Save flask.g.<user/team>."""
+    try:
+        flask.session['user'] = flask.g.user.ToJSON()
+        flask.session['team'] = flask.g.team.ToJSON()
+    except:
+        pass
 
 
 # Add headers to responses

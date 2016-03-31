@@ -60,5 +60,5 @@ def gae_login_handler():
     elif not user:
         app.logger.error('No user found and not logged in.')
         return flask.redirect(get_register_uri())
-    flask.session['user'] = user.uid
+    flask.session['uid'] = user.uid
     return flask.redirect('/')

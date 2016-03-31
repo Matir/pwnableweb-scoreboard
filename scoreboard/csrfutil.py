@@ -25,7 +25,7 @@ from scoreboard.app import app
 
 
 def _get_csrf_token(user=None, expires=None):
-    user = user or flask.session.get('user', flask.request.remote_addr)
+    user = user or flask.session.get('uid', flask.request.remote_addr)
     expires = expires or time.time() + 60 * 60 * 24
     expires_bytes = struct.pack('<I', expires)
     msg = '%s:%s' % (user, expires_bytes)
