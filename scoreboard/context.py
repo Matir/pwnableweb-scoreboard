@@ -82,15 +82,16 @@ def load_globals():
     uid = flask.session.get('uid')
     user = flask.session.get('user')
     team = flask.session.get('team')
-    if user:
-        flask.g.user = lightweight.User.FromJSON(user)
-        if team:
-            flask.g.team = lightweight.Team.FromJSON(team)
-    elif uid:
-        user = models.User.query.get(uid)
+    if uid:
         if user:
-            flask.g.user = lightweight.User(user)
-            flask.g.team = lightweight.Team(team) if team else None
+            flask.g.user = lightweight.User.FromJSON(user)
+            if team:
+                flask.g.team = lightweight.Team.FromJSON(team)
+        else:
+            user = models.User.query.get(uid)
+            if user:
+                flask.g.user = lightweight.User(user)
+                flask.g.team = lightweight.Team(team) if team else None
 
 
 @app.after_request
