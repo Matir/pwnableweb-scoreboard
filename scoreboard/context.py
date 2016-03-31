@@ -94,13 +94,15 @@ def load_globals():
 
 
 @app.after_request
-def save_session():
+def save_session(response):
     """Save flask.g.<user/team>."""
     try:
         flask.session['user'] = flask.g.user.ToJSON()
         flask.session['team'] = flask.g.team.ToJSON()
     except:
         pass
+    finally:
+        return response
 
 
 # Add headers to responses

@@ -40,7 +40,7 @@ class Proxy(object):
     def _load(self):
         """Copy in fields from the wrapped object."""
         if not self._wrapped:
-            return
+            return {}
         result = {}
         for field in self._fields():
             result[field] = getattr(self._wrapped, field)
@@ -56,6 +56,7 @@ class Proxy(object):
                     raise AttributeError(
                         "Could not find underlying representation for {}".format(
                             type(self).__name__))
+            self._dict = self._load()
             return getattr(self._wrapped, name)
 
     def __setattr__(self, name, value):
@@ -71,7 +72,10 @@ class Proxy(object):
     @classmethod
     def FromJSON(cls, obj):
         o = cls(None)
-        o._dict = obj
+        if isinstance(obj, dict):
+            o._dict = obj
+        else:
+            o._dict = {}
         return o
 
 
