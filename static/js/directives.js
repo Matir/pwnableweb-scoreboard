@@ -388,7 +388,7 @@ sbDirectives.directive('challengeBox', [
             if (!scope.chall)
               return;
             configService.get(function(cfg) {
-              if (cfg.scoring == 'PROGRESSIVE') {
+              if (cfg.scoring == 'progressive') {
                 scope.currentPoints = Math.floor(scope.chall.points /
                     Math.max(scope.chall.solves, 1));
               }

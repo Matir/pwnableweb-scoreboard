@@ -6,4 +6,3 @@ TITLE = 'CTF Scoreboard Dev'
 TEAMS = True
 ATTACHMENT_BACKEND = 'file:///tmp/attachments'
 LOGIN_METHOD = 'local'
-SCORING = 'PROGRESSIVE'
