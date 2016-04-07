@@ -229,7 +229,7 @@ class Team(restful.Resource):
             for answer in team.answers:
                 challenges.append({
                     'solved': answer.timestamp,
-                    'points': answer.challenge.points,
+                    'points': answer.current_points,
                     'name': answer.challenge.name,
                     'cid': answer.challenge_cid,
                     'cat_id': answer.challenge.category.cid,
