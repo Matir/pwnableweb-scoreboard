@@ -454,10 +454,10 @@ class Challenge(db.Model):
 
     def update_answers(self, exclude_team=None):
         """Update answers for variable scoring."""
-        mode = app.config.get('SCORING', 'PLAIN')
-        if mode == 'PLAIN':
+        mode = app.config.get('SCORING', 'plain')
+        if mode == 'plain':
             return
-        if mode == 'PROGRESSIVE':
+        if mode == 'progressive':
             for a in self.answers:
                 if a.team == exclude_team:
                     continue
@@ -556,14 +556,14 @@ class Answer(db.Model):
 
     @property
     def current_points(self):
-        mode = app.config.get('SCORING', 'PLAIN')
+        mode = app.config.get('SCORING', 'plain')
         hints = UnlockedHint.query.filter(UnlockedHint.team == self.team)
         deduction = sum(
                 h.hint.cost for h in hints if h.hint.challenge_cid == cid)
         value = self.challenge.points - deduction
-        if mode == 'PLAIN':
+        if mode == 'plain':
             return value
-        if mode == 'PROGRESSIVE':
+        if mode == 'progressive':
             return value / self.challenge.solves
 
 
