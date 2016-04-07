@@ -385,9 +385,12 @@ sbDirectives.directive('challengeBox', [
           scope.$watch('chall', function() {
             // Current points
             scope.currentPoints = (scope.chall && scope.chall.points) || 0;
+            if (!scope.chall)
+              return;
             configService.get(function(cfg) {
               if (cfg.scoring == 'PROGRESSIVE') {
-                scope.currentPoints = Math.floor(scope.chall.points / scope.chall.solves);
+                scope.currentPoints = Math.floor(scope.chall.points /
+                    Math.max(scope.chall.solves, 1));
               }
             });
           });

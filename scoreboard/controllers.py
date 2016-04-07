@@ -97,7 +97,7 @@ def submit_answer(cid, answer):
             models.ScoreHistory.add_entry(flask.g.team)
             challenge.update_answers(exclude_team=flask.g.team)
             correct = 'CORRECT'
-            return points
+            return ans.current_points
         else:
             correct = 'WRONG'
             raise errors.InvalidAnswerError('Really?  Haha no....')
