@@ -645,6 +645,7 @@ class Config(restful.Resource):
             login_url=auth.get_login_uri(),
             register_url=auth.get_register_uri(),
             login_method=app.config.get('LOGIN_METHOD', 'local'),
+            scoring=app.config.get('SCORING', 'PLAIN'),
             )
 
 api.add_resource(Config, '/api/config')
